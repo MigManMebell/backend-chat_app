@@ -12,9 +12,9 @@ from database import SessionLocal
 load_dotenv()
 
 # Secret key to encode/decode JWTs
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("JWT_SECRET")
 if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable not set. Please create .env file or set it in your hosting provider.")
+    raise ValueError("JWT_SECRET environment variable not set. Please create .env file or set it in your hosting provider.")
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
