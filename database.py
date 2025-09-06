@@ -13,10 +13,21 @@ if not SQLALCHEMY_DATABASE_URL:
 
 engine = None
 SessionLocal = None
-# try:
-#     engine = create_engine(SQLALCHEMY_DATABASE_URL)
-#     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-# except Exception as e:
-#     print(f"!!! DATABASE CONNECTION FAILED ON CREATE_ENGINE: {e}")
+
+def get_engine():
+    global engine
+    if engine is None:
+        try:
+            engine = create_engine(SQLALCHEMY_DATABASE_URL)
+        except Exception as e:
+            print(f"!!! DATABASE CONNECTION FAILED ON CREATE_ENGINE: {e}")
+            engine = None # Ensure engine is None if creation fails
+    return engine
+
+def get_session_local():
+    global SessionLocal
+    if SessionLocal is None and get_engine() is not None:
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+    return SessionLocal
 
 Base = declarative_base()
