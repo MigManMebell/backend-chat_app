@@ -7,12 +7,11 @@ from sqlalchemy.orm import Session
 import os
 import crud, models, schemas
 from database import SessionLocal
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Secret key to encode/decode JWTs
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("No SECRET_KEY environment variable set")
 if not SECRET_KEY:
     raise ValueError("No SECRET_KEY environment variable set")
 
