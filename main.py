@@ -12,10 +12,14 @@ app = FastAPI()
 def on_startup():
     # This will try to create tables on startup.
     # If the database is not ready, it might fail, but the app will still start.
+    if engine is None:
+        print("!!! DATABASE ENGINE NOT CREATED. SKIPPING TABLE CREATION.")
+        return
     try:
         Base.metadata.create_all(bind=engine)
+        print("--- Database tables checked/created successfully.")
     except Exception as e:
-        print(f"Error creating database tables: {e}")
+        print(f"!!! Error creating database tables: {e}")
 
 # CORS middleware
 origins = [
@@ -33,6 +37,8 @@ app.add_middleware(
 
 # Dependency
 def get_db():
+    if SessionLocal is None:
+        raise HTTPException(status_code=500, detail="Database connection is not configured correctly.")
     db = SessionLocal()
     try:
         yield db
