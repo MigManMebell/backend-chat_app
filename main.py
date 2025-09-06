@@ -4,11 +4,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import timedelta
 import crud, models, schemas, auth
-from database import SessionLocal, engine
-
-models.Base.metadata.create_all(bind=engine)
+from database import SessionLocal, engine, Base
 
 app = FastAPI()
+
+@app.on_event("startup")
+def on_startup():
+    # This will try to create tables on startup.
+    # If the database is not ready, it might fail, but the app will still start.
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
 
 # CORS middleware
 origins = [
@@ -31,6 +38,20 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+@app.get("/db-check")
+def db_check(db: Session = Depends(get_db)):
+    try:
+        # The dependency `get_db` itself tries to create a session.
+        # If this endpoint returns, it means a session was created.
+        db.execute('SELECT 1')
+        return {"status": "db_connection_successful"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
 
 @app.post("/token", response_model=schemas.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
