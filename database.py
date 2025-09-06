@@ -13,10 +13,10 @@ if not SQLALCHEMY_DATABASE_URL:
 
 engine = None
 SessionLocal = None
-try:
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-except Exception as e:
-    print(f"!!! DATABASE CONNECTION FAILED ON CREATE_ENGINE: {e}")
+# try:
+#     engine = create_engine(SQLALCHEMY_DATABASE_URL)
+#     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# except Exception as e:
+#     print(f"!!! DATABASE CONNECTION FAILED ON CREATE_ENGINE: {e}")
 
 Base = declarative_base()
