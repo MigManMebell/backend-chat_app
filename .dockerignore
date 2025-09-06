@@ -1,0 +1,22 @@
+# Игнорировать директорию Git
+.git
+.gitignore
+
+# Игнорировать кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Игнорировать виртуальное окружение
+.venv
+venv/
+env/
+
+# Игнорировать директории frontend-приложений
+frontend/
+chat-app/
+
+# Игнорировать файлы IDE/редакторов
+.vscode/
+.idea/
