@@ -24,6 +24,7 @@ def on_startup():
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
+    "https://migmanmebell-frontend-chat-app-9bda.twc1.net",
 ]
 
 app.add_middleware(
