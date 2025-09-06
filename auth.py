@@ -5,15 +5,16 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 import os
+from dotenv import load_dotenv
 import crud, models, schemas
 from database import SessionLocal
+
+load_dotenv()
 
 # Secret key to encode/decode JWTs
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
-    raise ValueError("No SECRET_KEY environment variable set")
-if not SECRET_KEY:
-    raise ValueError("No SECRET_KEY environment variable set")
+    raise ValueError("SECRET_KEY environment variable not set. Please create .env file or set it in your hosting provider.")
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
